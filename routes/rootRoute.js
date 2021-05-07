@@ -7,12 +7,8 @@ const {
 	deleteEntry,
 } = require("../controllers/root");
 
-router.get("/", getData);
+router.route("/").get(getData).post(submitData);
 
-router.post("/", submitData);
-
-router.put("/:id", updateEntry);
-
-router.delete("/:id", deleteEntry);
+// router.route("/:id").put(updateEntry).delete(deleteEntry);
 
 module.exports = router;

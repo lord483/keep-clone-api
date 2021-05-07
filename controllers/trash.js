@@ -1,4 +1,4 @@
-const parameters = require("../app");
+const parameters = require("../mongodb");
 
 const getTrashData = (req, res) => {
 	parameters.trashCollection
