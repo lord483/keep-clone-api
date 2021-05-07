@@ -1,18 +1,33 @@
 const express = require("express");
 const app = express();
+const rootRoute = require("./routes/rootRoute.js");
+const trash = require("./routes/trash.js");
+const allowCORS = require("./cors");
 require("dotenv").config();
+
 const MongoClient = require("mongodb").MongoClient;
-const ObjectId = require("mongodb").ObjectId;
-const uri = process.env.KEEP_DB_URI;
+const ObjectId = require("mongodb").ObjectId; // This way you can create new ObjectID to your collections
+const uri = process.env.KEEP_DB_URI; // Fetch your own MongoDB URI
+
+// Suppress useNewUrlParser, useUnifiedTopology deprecation warnings
 const client = new MongoClient(uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
-const port = 3000;
 
+// Setting up local Port number if not given in process.env.PORT
+const port = 5000;
+
+// Basic middlewares to parse JSON data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.all("*", allowCORS);
 
+// Seperate routes middlewares
+app.use("/api", rootRoute);
+app.use("/api/trash", trash);
+
+// MongoDB collections goes here
 let mainCollection = "";
 let trashCollection = "";
 let tagsCollection = "";
@@ -29,90 +44,16 @@ client.connect((err) => {
 	}
 });
 
-app.get("/", (req, res) => {
-	mainCollection
-		.find({})
-		.toArray()
-		.then((result) => {
-			res.status(200).send(result);
-		})
-		.catch((error) => console.log(error));
-});
-
-app.get("/trash", (req, res) => {
-	trashCollection
-		.find({})
-		.toArray()
-		.then((result) => {
-			res.status(200).send(result);
-		})
-		.catch((error) => console.log(error));
-});
-
-app.post("/", (req, res) => {
-	const newPost = req.body;
-
-	mainCollection
-		.insertOne(newPost)
-		.then(() => {
-			res.status(200).send(`new post added`);
-		})
-		.catch((error) => console.log(error));
-});
-
-app.post("/trash", (req, res) => {
-	const newPost = req.body;
-
-	trashCollection
-		.insertOne(newPost)
-		.then(() => {
-			res.status(200).send(`new post added`);
-		})
-		.catch((error) => console.log(error));
-});
-
-app.put("/", (req, res) => {
-	const newValue = req.body;
-
-	if (!newValue.value) {
-		res.send("empty values and/or keys");
-	} else {
-		for (let i = 0; i < newValue.value.length; i++) {
-			const key = newValue.field[i];
-			const value = newValue.value[i];
-			mainCollection
-				.updateOne(
-					{ _id: ObjectId(newValue.id) },
-					{ $set: { [key]: newValue.value } }
-				)
-				.then((result) => console.log(`${key.length} values updated`))
-				.catch((error) => console.log(error));
-		}
-	}
-	res.status(200).send(`updated`);
-});
-
-app.delete("/", (req, res) => {
-	mainCollection
-		.deleteOne({ _id: ObjectId(req.body.id) })
-		.then((result) => {
-			res.status(200).send(`deleted`);
-		})
-		.catch((error) => console.log(error));
-});
-
-app.delete("/trash", (req, res) => {
-	trashCollection
-		.deleteOne({ _id: ObjectId(req.body.id) })
-		.then((result) => {
-			res.status(200).send(`deleted`);
-		})
-		.catch((error) => console.log(error));
-});
-
 app.listen(port, () => {
 	console.log(`server listening on port ${port}`);
 });
+
+module.exports = {
+	ObjectId,
+	mainCollection,
+	trashCollection,
+	tagsCollection,
+};
 
 // deleteMany dynamic approach
 
