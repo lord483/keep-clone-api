@@ -24,9 +24,9 @@ main().catch(() => console.log(error));
 const getNotes = async (client, query, res) => {
 	const note = await client.db("notesDB").collection("note").find(query);
 	if (note) {
-		console.log(`note found with query ${JSON.stringify(query)}`);
+		// console.log(`note found with query ${JSON.stringify(query)}`);
 		const result = await note.toArray();
-		res.status(200).send(result);
+		res.status(200).json(result);
 	} else {
 		console.log(`nothing found with query ${JSON.stringify(query)}`);
 	}
