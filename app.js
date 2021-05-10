@@ -2,21 +2,20 @@ const express = require("express");
 const app = express();
 const rootRoute = require("./routes/rootRoute.js");
 const trash = require("./routes/trash.js");
-const allowCORS = require("./cors");
+// const allowCORS = require("./cors");
 // Setting up local Port number if not given in process.env.PORT
-const port = 5000;
-//KEEP_DB_URI=mongodb+srv://keep_clone:AerIF4xInLDIuvD0@notes.sxwio.mongodb.net/notesDB?retryWrites=true&w=majority
+const port = process.env.PORT || 5000;
 
 // Basic middlewares to parse JSON data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Seperate routes middlewares
-app.all("*", allowCORS);
+// app.all("*", allowCORS);
 app.use("/api", rootRoute);
 app.use("/api/trash", trash);
 
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
 	console.log(`server listening on port ${port}`);
 });
 
