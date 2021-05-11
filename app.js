@@ -2,16 +2,16 @@ const express = require("express");
 const app = express();
 const rootRoute = require("./routes/rootRoute.js");
 const trash = require("./routes/trash.js");
-// const allowCORS = require("./cors");
+const path = require("path");
+
 // Setting up local Port number if not given in process.env.PORT
 const port = process.env.PORT || 5000;
 
 // Basic middlewares to parse JSON data
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Seperate routes middlewares
-// app.all("*", allowCORS);
 app.use("/api", rootRoute);
 app.use("/api/trash", trash);
 
