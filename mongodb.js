@@ -37,17 +37,12 @@ const createUpdateNote = async (client, updateQuery, updateCreateNote, res) => {
 		.db("notesDB")
 		.collection("note")
 		.updateOne(
-			{ title: updateQuery },
-			{ $set: updateCreateNote },
+			{ updateQuery },
+			{ $set: { ...updateCreateNote } },
 			{ upsert: true }
 		);
 	if (note) {
-		console.log(`note found with query ${JSON.stringify(updateCreateNote)}`);
-		console.log(`added ${note.modifiedCount || note.upsertedCount} note(s)`);
-		console.log(note);
-		res
-			.status(200)
-			.send(`added ${note.modifiedCount || note.upsertedCount} note(s)`);
+		res.status(200).json({ success: true });
 	} else {
 		console.log(`nothing found with query ${JSON.stringify(updateCreateNote)}`);
 	}

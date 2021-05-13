@@ -5,7 +5,7 @@ const {
 	submitData,
 	updateEntry,
 	deleteEntry,
-} = require("../controllers/root");
+} = require("../controllers/root.js");
 
 router.route("/").get(getData).post(submitData);
 
