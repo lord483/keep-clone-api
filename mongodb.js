@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-// const ObjectId = require("mongodb").ObjectId; // This way you can create new ObjectID to your collections
+const ObjectId = require("mongodb").ObjectId; // This way you can create new ObjectID to your collections
 require("dotenv").config();
 const uri = process.env.KEEP_DB_URI; // Fetch your own MongoDB URI
 
@@ -33,6 +33,9 @@ const getNotes = async (client, query, res) => {
 };
 
 const createUpdateNote = async (client, updateQuery, updateCreateNote, res) => {
+	if (updateQuery.selectedId === "") {
+		updateQuery.selectedId = new ObjectId();
+	}
 	const note = await client
 		.db("notesDB")
 		.collection("note")

@@ -9,7 +9,6 @@ const getData = async (req, res) => {
 };
 
 const submitData = async (req, res) => {
-	// console.log(req.toArray());
 	const newPost = req.body;
 	try {
 		await createUpdateNote(client, newPost.query, newPost.noteData, res);
