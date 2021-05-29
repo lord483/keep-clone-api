@@ -1,4 +1,10 @@
-const { client, getNotes, createUpdateNote } = require("../mongodb");
+const {
+	client,
+	getNotes,
+	createNote,
+	updateNote,
+	deleteNote,
+} = require("../mongodb");
 
 const getData = async (req, res) => {
 	try {
@@ -11,39 +17,35 @@ const getData = async (req, res) => {
 const submitData = async (req, res) => {
 	const newPost = req.body;
 	try {
-		await createUpdateNote(client, newPost.query, newPost.noteData, res);
+		await createNote(client, newPost.noteData, res);
 	} catch (error) {
 		console.error(error);
 	}
 };
 
-// const updateEntry = async (req, res) => {
-// 	const newValue = req.body;
+const updateEntry = async (req, res) => {
+	const newValue = req.body;
 
-// 	if (!newValue.value) {
-// 		res.send("empty values and/or keys");
-// 	} else {
-// 		try {
-// 			await updateNote(client, newPost, res);
-// 		} catch (error) {
-// 			console.error(error);
-// 		}
-// 	}
-// 	res.status(200).send(`updated`);
-// };
+	try {
+		await updateNote(client, newValue.query, newValue.noteData, res);
+	} catch (error) {
+		console.error(error);
+	}
+};
 
-// const deleteEntry = (req, res) => {
-// 	mainCollection
-// 		.deleteOne({ _id: ObjectId(req.body.id) })
-// 		.then((result) => {
-// 			res.status(200).send(`deleted`);
-// 		})
-// 		.catch((error) => console.log(error));
-// };
+const deleteEntry = async (req, res) => {
+	const newValue = req.body;
+
+	try {
+		await deleteNote(client, newValue, res);
+	} catch (error) {
+		console.error(error);
+	}
+};
 
 module.exports = {
 	getData,
 	submitData,
-	// updateEntry,
-	// deleteEntry,
+	updateEntry,
+	deleteEntry,
 };

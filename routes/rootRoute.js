@@ -9,6 +9,7 @@ const {
 
 router.route("/").get(getData).post(submitData);
 
-// router.route("/:id").put(updateEntry).delete(deleteEntry);
+router.route("/update").put(updateEntry);
+router.route("/delete").delete(deleteEntry);
 
 module.exports = router;

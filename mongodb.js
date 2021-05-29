@@ -32,36 +32,53 @@ const getNotes = async (client, query, res) => {
 	}
 };
 
-const createUpdateNote = async (client, updateQuery, updateCreateNote, res) => {
-	if (updateQuery.selectedId === "") {
-		updateQuery.selectedId = new ObjectId();
+const createNote = async (client, noteData, res) => {
+	const note = await client
+		.db("notesDB")
+		.collection("note")
+		.insertOne(noteData);
+	if (note) {
+		res.status(200).json({ success: true });
+	} else {
+		res.json({ success: false });
+		console.log(note);
 	}
+};
+
+const updateNote = async (client, updateQuery, updateData, res) => {
 	const note = await client
 		.db("notesDB")
 		.collection("note")
 		.updateOne(
-			{ updateQuery },
-			{ $set: { ...updateCreateNote } },
-			{ upsert: true }
+			{ _id: ObjectId(updateQuery.selectedId) },
+			{ $set: { ...updateData } }
 		);
-	if (note) {
+
+	if (note.modifiedCount > 0) {
 		res.status(200).json({ success: true });
 	} else {
-		console.log(`nothing found with query ${JSON.stringify(updateCreateNote)}`);
+		console.log(note);
+		res.json({ success: true });
 	}
 };
 
-// const listDatabases = async (client) => {
-// 	const databasesList = await client.db().admin().listDatabases();
-// 	console.log("Databases:");
+const deleteNote = async (client, deleteQuery, res) => {
+	const note = await client
+		.db("notesDB")
+		.collection("note")
+		.deleteOne({ _id: ObjectId(deleteQuery.selectedId) });
 
-// 	databasesList.databases.map((db) => {
-// 		console.log(`- ${db.name}`);
-// 	});
-// };
+	if (note) {
+		return;
+	} else {
+		console.log(note);
+	}
+};
 
 module.exports = {
 	client,
 	getNotes,
-	createUpdateNote,
+	createNote,
+	updateNote,
+	deleteNote,
 };

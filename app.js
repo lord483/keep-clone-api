@@ -17,7 +17,7 @@ if (envir === "production") {
 }
 
 app.use("/api", rootRoute);
-app.use("/api/trash", trash);
+// app.use("/api/trash", trash);
 
 app.listen(port, () => {
 	console.log(`server listening on port ${port} and environment is ${envir}`);
