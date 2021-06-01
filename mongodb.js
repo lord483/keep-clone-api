@@ -38,7 +38,7 @@ const createNote = async (client, noteData, res) => {
 		.collection("note")
 		.insertOne(noteData);
 	if (note) {
-		res.status(200).json({ success: true });
+		res.status(200).json({ success: true, insertedId: note.insertedId });
 	} else {
 		res.json({ success: false });
 		console.log(note);
