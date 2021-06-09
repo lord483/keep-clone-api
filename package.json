@@ -2,7 +2,7 @@
 	"name": "keep-clone-api",
 	"version": "1.0.0",
 	"description": "server for keep-clone web-app",
-	"private": "true",
+	"private": "false",
 	"main": "app.js",
 	"scripts": {
 		"start": "nodemon app.js"
