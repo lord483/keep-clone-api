@@ -1,14 +1,13 @@
 const {
-	client,
 	getNotes,
 	createNote,
 	updateNote,
 	deleteNote,
-} = require("../mongodb");
+} = require("../database/mongodb");
 
 const getData = async (req, res) => {
 	try {
-		await getNotes(client, {}, res);
+		await getNotes({}, req, res);
 	} catch (error) {
 		console.error(error);
 	}
@@ -17,7 +16,7 @@ const getData = async (req, res) => {
 const submitData = async (req, res) => {
 	const newPost = req.body;
 	try {
-		await createNote(client, newPost.noteData, res);
+		await createNote(newPost.noteData, req, res);
 	} catch (error) {
 		console.error(error);
 	}
@@ -25,9 +24,8 @@ const submitData = async (req, res) => {
 
 const updateEntry = async (req, res) => {
 	const newValue = req.body;
-
 	try {
-		await updateNote(client, newValue.query, newValue.noteData, res);
+		await updateNote(newValue.query, newValue.noteData, req, res);
 	} catch (error) {
 		console.error(error);
 	}
@@ -37,7 +35,7 @@ const deleteEntry = async (req, res) => {
 	const newValue = req.body;
 
 	try {
-		await deleteNote(client, newValue, res);
+		await deleteNote(newValue, req, res);
 	} catch (error) {
 		console.error(error);
 	}
