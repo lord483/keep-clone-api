@@ -27,22 +27,7 @@ const submitData = async (req, res) => {
 
 const updateEntry = async (req, res) => {
 	let newValue = req.body;
-	if ("status" in newValue.noteData) {
-		let tempData = req.body.noteData;
-		if (tempData.history[tempData.history.length - 1] === tempData.status) {
-			return;
-		} else {
-			newValue = {
-				...newValue,
-				noteData: {
-					...tempData,
-					history: [...tempData.history, tempData.status],
-				},
-			};
-		}
-	} else {
-		newValue = req.body;
-	}
+
 	try {
 		const result = await updateNote(newValue.query, newValue.noteData);
 		res.json(result);
