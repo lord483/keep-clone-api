@@ -1,11 +1,11 @@
-const client = require("../../mongoClient");
+const client = require("../mongoClient");
 const ObjectId = require("mongodb").ObjectId;
 
-const updateExisting = async (updateQuery, updateData, pathParam) => {
+const updateExisting = async (updateQuery, updateData) => {
 	try {
 		const note = await client
-			.db("notesDB")
-			.collection(pathParam)
+			.db("Notes")
+			.collection("allNotes")
 			.updateOne(
 				{ _id: ObjectId(updateQuery.selectedId) },
 				{ $set: { ...updateData } }
