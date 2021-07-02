@@ -15,8 +15,8 @@ const main = async () => {
 
 main().catch(() => console.log(error));
 
-const getNotes = async (currentStatus) => {
-	const result = await fetchAll(currentStatus);
+const getNotes = async (currentRequest) => {
+	const result = await fetchAll(currentRequest);
 	return result;
 };
 
