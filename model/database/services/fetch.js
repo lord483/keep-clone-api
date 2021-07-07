@@ -3,24 +3,19 @@ const client = require("../mongoClient");
 
 const fetchAll = async (fetchQuery) => {
 	const request = JSON.parse(fetchQuery);
-	let note;
+	let mongoOp;
 	try {
 		// await searchIndexer(); // Text index already created
 
 		if (request.searchQuery) {
-			const result = client
-				.db("Notes")
-				.collection("allNotes")
-				.find({ $text: { $search: request.searchQuery } });
-			note = await result.toArray();
+			mongoOp = { $text: { $search: request.searchQuery } };
 		} else if (request.noteType) {
-			const result = client
-				.db("Notes")
-				.collection("allNotes")
-				.find({ status: request.noteType });
-			note = await result.toArray();
+			mongoOp = { status: request.noteType };
 		}
-		return note;
+
+		const result = client.db("Notes").collection("allNotes").find(mongoOp);
+
+		return await result.toArray();
 	} catch (error) {
 		console.log("database/services/fetch.js\n", error);
 	}
